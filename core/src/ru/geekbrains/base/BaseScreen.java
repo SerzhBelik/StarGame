@@ -1,5 +1,6 @@
 package ru.geekbrains.base;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 
@@ -10,7 +11,7 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -60,6 +61,7 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
         return false;
     }
 
