@@ -73,10 +73,13 @@ public class NewScreen  extends BaseScreen {
                 pos.set(pos.x+1, pos.y);
                 break;
         }
+        if (pos.x  < 0) pos.x = 0;
+        if (HIEGHT - SHIP_HIEGHT - pos.y < 0) pos.y = HIEGHT - SHIP_HIEGHT;
+        if (pos.x + SHIP_WIDTH > WIDTH) pos.x = WIDTH - SHIP_WIDTH;
+        if (pos.y < 0 ) pos.y = 0;
     }
 
     private Vector2 getCourse(Vector2 pos, Vector2 newPos) {
-
         return newPos.cpy().sub(pos).nor().scl(SPEED_MODIFIER);
     }
 
@@ -90,12 +93,12 @@ public class NewScreen  extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (screenX - SHIP_WIDTH/2 < 0) screenX = SHIP_WIDTH/2;
+        if (HIEGHT - SHIP_HIEGHT/2 - screenY < 0) screenY = HIEGHT - SHIP_HIEGHT/2;
+        if (screenX + SHIP_WIDTH/2 > WIDTH) screenX = WIDTH - SHIP_WIDTH/2;
+        if (screenY - SHIP_HIEGHT/2 < 0 ) screenY = SHIP_HIEGHT/2;
         newPos = new Vector2(screenX - SHIP_WIDTH/2, HIEGHT - SHIP_HIEGHT/2 - screenY );
         movement = true;
-
-//        System.out.println(screenX + " " + screenY);
-//        System.out.println(pos.x + " " + pos.y);
-
         return false;
     }
 
@@ -119,7 +122,6 @@ public class NewScreen  extends BaseScreen {
                 newPos = new Vector2(posX+1, posY);
                 break;
         }
-//        newPos = new Vector2(posX, posY);
         return true;
     }
     @Override
