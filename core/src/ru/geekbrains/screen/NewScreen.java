@@ -23,7 +23,9 @@ public class NewScreen  extends BaseScreen {
     private final int HIEGHT = 480;
     private final int SHIP_WIDTH = 80;
     private final int SHIP_HIEGHT = 112;
+    private int keycode;
     private boolean movement = false;
+    private boolean pressed = false;
 
     @Override
     public void show() {
@@ -31,18 +33,18 @@ public class NewScreen  extends BaseScreen {
         batch = new SpriteBatch();
         backGround = new Texture("background.jpg");
         spaceShip = new Texture("ship.png");
-        pos = new Vector2(posX,posY);
-//        v = new Vector2(0.5f,0.3f);
+        pos = new Vector2(posX, posY);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-//        Gdx.gl.glClearColor(0.128f, 0.53f, 0.9f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (movement) {
-            course = getCourse(pos , newPos);
-            System.out.println(course.x + " " + course.y);
+            if (pressed){
+                getNewPos(keycode);
+                course = new Vector2(0,0);
+            } else course = getCourse(pos , newPos);
         }
         batch.begin();
         batch.draw(backGround, 0,0);
@@ -53,6 +55,23 @@ public class NewScreen  extends BaseScreen {
             if(newPos.cpy().sub(pos).len()<1){
                 movement = false;
             }
+        }
+    }
+
+    private void getNewPos(int keycode) {
+        switch (keycode){
+            case 19:
+                pos.set(pos.x, pos.y+1);
+                break;
+            case 20:
+                pos.set(pos.x, pos.y-1);
+                break;
+            case 21:
+                pos.set(pos.x-1, pos.y);
+                break;
+            case 22:
+                pos.set(pos.x+1, pos.y);
+                break;
         }
     }
 
@@ -71,32 +90,44 @@ public class NewScreen  extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-//        if(newPos == null) {
-            newPos = new Vector2(screenX - SHIP_WIDTH/2, HIEGHT - SHIP_HIEGHT/2 - screenY );
-//        }
+        newPos = new Vector2(screenX - SHIP_WIDTH/2, HIEGHT - SHIP_HIEGHT/2 - screenY );
         movement = true;
-        System.out.println(screenX + " " + screenY);
-        System.out.println(pos.x + " " + pos.y);
 
-        return super.touchDown(screenX,screenY, pointer, button);
+//        System.out.println(screenX + " " + screenY);
+//        System.out.println(pos.x + " " + pos.y);
+
+        return false;
     }
 
+    @Override
+    public boolean keyDown(int keycode) {
+        this.keycode = keycode;
+        movement = true;
+        pressed = true;
+        System.out.println(keycode);
+        switch (keycode){
+            case 19:
+                newPos = new Vector2(posX, posY+1);
+                break;
+            case 20:
+                newPos = new Vector2(posX, posY-1);
+                break;
+            case 21:
+                newPos = new Vector2(posX-1, posY);
+                break;
+            case 22:
+                newPos = new Vector2(posX+1, posY);
+                break;
+        }
+//        newPos = new Vector2(posX, posY);
+        return true;
+    }
+    @Override
+    public boolean keyUp(int keycode) {
+       movement = false;
+       pressed = false;
+        return false;
+    }
 
-//    @Override
-//    public void create () {
-//        batch = new SpriteBatch();
-//        backGround = new Texture("background.jpg");
-//        spaceShip = new Texture("ship.png");
-//    }
-//
-//    @Override
-//    public void render () {
-//        Gdx.gl.glClearColor(0.123f, 0.53f, 0.9f, 1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        batch.begin();
-//        batch.draw(backGround, 0, 0);
-//        batch.draw(spaceShip, 10, 10);
-//        batch.end();
-//    }
 
 }
