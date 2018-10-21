@@ -50,7 +50,7 @@ public class NewScreen  extends BaseScreen {
         batch.draw(backGround, 0,0);
         batch.draw(spaceShip, pos.x, pos.y);
         batch.end();
-        if (movement) {
+        if (movement && !pressed) {
             pos.add(course);
             if(newPos.cpy().sub(pos).len()<1){
                 movement = false;
@@ -61,16 +61,16 @@ public class NewScreen  extends BaseScreen {
     private void getNewPos(int keycode) {
         switch (keycode){
             case 19:
-                pos.set(pos.x, pos.y+1);
+                pos.set(pos.x, pos.y+SPEED_MODIFIER);
                 break;
             case 20:
-                pos.set(pos.x, pos.y-1);
+                pos.set(pos.x, pos.y-SPEED_MODIFIER);
                 break;
             case 21:
-                pos.set(pos.x-1, pos.y);
+                pos.set(pos.x-SPEED_MODIFIER, pos.y);
                 break;
             case 22:
-                pos.set(pos.x+1, pos.y);
+                pos.set(pos.x+SPEED_MODIFIER, pos.y);
                 break;
         }
         if (pos.x  < 0) pos.x = 0;
@@ -107,28 +107,13 @@ public class NewScreen  extends BaseScreen {
         this.keycode = keycode;
         movement = true;
         pressed = true;
-        System.out.println(keycode);
-        switch (keycode){
-            case 19:
-                newPos = new Vector2(posX, posY+1);
-                break;
-            case 20:
-                newPos = new Vector2(posX, posY-1);
-                break;
-            case 21:
-                newPos = new Vector2(posX-1, posY);
-                break;
-            case 22:
-                newPos = new Vector2(posX+1, posY);
-                break;
-        }
         return true;
     }
     @Override
     public boolean keyUp(int keycode) {
        movement = false;
        pressed = false;
-        return false;
+       return false;
     }
 
 
