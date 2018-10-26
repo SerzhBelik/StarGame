@@ -23,7 +23,7 @@ public class NewScreen  extends BaseScreen {
         batch = new SpriteBatch();
         backGround = new Texture("background.jpg");
         spaceShip = new Texture("ship.png");
-        pos = new Vector2(0, 0);
+        pos = new Vector2(-21f, -21f);
         touch = new Vector2();
         v = new Vector2();
         buf = new Vector2();
@@ -42,8 +42,7 @@ public class NewScreen  extends BaseScreen {
         }
 
         batch.begin();
-        batch.draw(backGround, -24f*(float) (Math.sqrt(super.aspect)),-24f/(float) (Math.sqrt(super.aspect)), 42f*super.aspect, 42f);
-//        batch.draw(backGround, -24f,-24f, 42f, 42f);
+        batch.draw(backGround, -21f,-21f, 42f, 42f);
         batch.draw(spaceShip, pos.x, pos.y, 8f, 8f);
         batch.end();
 
