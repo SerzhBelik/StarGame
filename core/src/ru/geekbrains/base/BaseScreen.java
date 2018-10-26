@@ -17,10 +17,12 @@ public class BaseScreen implements Screen, InputProcessor {
     private Rect glBounds;
     private Vector2 touch;
 
+
     protected Matrix4 worldTOGL;
     protected Matrix3 screenToWorld;
     protected SpriteBatch batch;
     protected float aspect;
+    protected final float WORLD_BOUNDS_MODIFIER = 42f;
 
 
 
@@ -50,8 +52,8 @@ public class BaseScreen implements Screen, InputProcessor {
         aspect = width/(float)height;
 //        System.out.print(aspect);
 
-        worldBounds.setHeight(42f);
-        worldBounds.setWidth(42f*aspect);
+        worldBounds.setHeight(WORLD_BOUNDS_MODIFIER);
+        worldBounds.setWidth(WORLD_BOUNDS_MODIFIER*aspect);
         MatrixUtils.calcTransitionMatrix(worldTOGL, worldBounds, glBounds);
         MatrixUtils.calcTransitionMatrix(screenToWorld, screenBounds, worldBounds);
         batch.setProjectionMatrix(worldTOGL);

@@ -11,7 +11,10 @@ import ru.geekbrains.base.BaseScreen;
 public class NewScreen  extends BaseScreen {
     private Texture backGround;
     private Texture spaceShip;
-    private final float SPEED_MODIFIER = 0.1f;
+    private float speedModifier = super.WORLD_BOUNDS_MODIFIER/400;
+    private float shipHeight = super.WORLD_BOUNDS_MODIFIER/5;
+    private float shipWidth = super.WORLD_BOUNDS_MODIFIER/5;
+
     private Vector2 pos;
     private Vector2 touch;
     private Vector2 v;
@@ -23,10 +26,11 @@ public class NewScreen  extends BaseScreen {
         batch = new SpriteBatch();
         backGround = new Texture("background.jpg");
         spaceShip = new Texture("ship.png");
-        pos = new Vector2(-21f, -21f);
+        pos = new Vector2();
         touch = new Vector2();
         v = new Vector2();
         buf = new Vector2();
+        pos.set(-shipWidth/2, -super.WORLD_BOUNDS_MODIFIER/2);
 
     }
 
@@ -42,8 +46,10 @@ public class NewScreen  extends BaseScreen {
         }
 
         batch.begin();
-        batch.draw(backGround, -21f,-21f, 42f, 42f);
-        batch.draw(spaceShip, pos.x, pos.y, 8f, 8f);
+        batch.draw(backGround, -super.WORLD_BOUNDS_MODIFIER/2*super.aspect,-super.WORLD_BOUNDS_MODIFIER/2,
+                super.WORLD_BOUNDS_MODIFIER*super.aspect, super.WORLD_BOUNDS_MODIFIER);
+//        batch.draw(backGround, -21f,-21f, 42f, 42f);
+        batch.draw(spaceShip, pos.x, pos.y, shipWidth, shipHeight);
         batch.end();
 
     }
@@ -69,7 +75,7 @@ public class NewScreen  extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer){
         this.touch = touch;
-        v.set(touch.cpy().sub(pos).nor().scl(SPEED_MODIFIER));
+        v.set(touch.cpy().sub(pos).nor().scl(speedModifier));
         return false;
     }
 
