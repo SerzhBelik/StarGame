@@ -3,8 +3,11 @@ package ru.geekbrains.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Matrix3;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.StarGame;
@@ -16,33 +19,14 @@ import ru.geekbrains.sprite.Exit_btn;
 import ru.geekbrains.sprite.Star;
 import ru.geekbrains.sprite.Start_btn;
 
-public class MenuScreen extends BaseScreen {
+public class GameScreen extends BaseScreen {
     private static final int STAR_COUNT = 256;
     private Background background;
     private Texture bgTexture;
     private TextureAtlas textureAtlas;
     private Star[] stars;
-    private Start_btn start_btn;
-    private Exit_btn exit_btn;
     private Vector2 touch;
     private StarGame starGame;
-
-    public MenuScreen(StarGame starGame) {
-        super();
-        this.starGame = starGame;
-
-    }
-//    private Texture backGround;
-//    private Texture spaceShip;
-//    private float speedModifier = super.WORLD_BOUNDS_MODIFIER/200;
-//    private float shipHeight = super.WORLD_BOUNDS_MODIFIER/6;
-//    private float shipWidth = super.WORLD_BOUNDS_MODIFIER/6;
-
-//    private Vector2 pos;
-//    private Vector2 touch;
-//    private Vector2 v;
-//    private Vector2 buf;
-//    private Sprite sprite;
 
     @Override
     public void show() {
@@ -54,8 +38,8 @@ public class MenuScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(textureAtlas, Star.getStarName());
         }
-        start_btn = new Start_btn(textureAtlas);
-        exit_btn = new Exit_btn(textureAtlas);
+//        start_btn = new Start_btn(textureAtlas);
+//        exit_btn = new Exit_btn(textureAtlas);
 //        batch = new SpriteBatch();
 //        backGround = new Texture("background.jpg");
 //        spaceShip = new Texture("ship.png");
@@ -75,25 +59,25 @@ public class MenuScreen extends BaseScreen {
         super.render(delta);
         update(delta);
         draw();
-        }
+    }
 
-        public void update(float delta) {
-            for (int i = 0; i < stars.length; i++) {
-                stars[i].update(delta);
-            }
+    public void update(float delta) {
+        for (int i = 0; i < stars.length; i++) {
+            stars[i].update(delta);
         }
+    }
 
-        public void draw() {
-            Gdx.gl.glClearColor(0.128f, 0.53f, 0.9f, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            batch.begin();
-            background.draw(batch);
-            for (int i = 0; i < stars.length; i++) {
-                stars[i].draw(batch);
-            }
-            start_btn.draw(batch);
-            exit_btn.draw(batch);
-            batch.end();
+    public void draw() {
+        Gdx.gl.glClearColor(0.128f, 0.53f, 0.9f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+        background.draw(batch);
+        for (int i = 0; i < stars.length; i++) {
+            stars[i].draw(batch);
+        }
+//        start_btn.draw(batch);
+//        exit_btn.draw(batch);
+        batch.end();
 
 //        buf.set(touch);
 //        if (buf.sub(pos).len() > v.len()){
@@ -142,8 +126,8 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer){
         this.touch = touch;
-        if(start_btn.btnTouchDown(touch)) starGame.setScreen(new GameScreen());
-        exit_btn.btnTouchDown(touch);
+//        if(start_btn.btnTouchDown(touch)) starGame.setScreen(new NewScreen());
+//        exit_btn.btnTouchDown(touch);
 //        if(start_btn.isMe(this.touch)) start_btn.setScale((float)(start_btn.getScale()*0.95));/*start_btn.setHeightProportion(0.19f);*/
 //        if(exit_btn.isMe(this.touch)) exit_btn.setScale((float)(exit_btn.getScale()*0.95));
         return false;
@@ -153,8 +137,8 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        start_btn.btnTouchUp(touch);
-        if (exit_btn.btnTouchUp(this.touch)) System.exit(0);
+//        start_btn.btnTouchUp(touch);
+//        if (exit_btn.btnTouchUp(this.touch)) System.exit(0);
 
         return false;
     }

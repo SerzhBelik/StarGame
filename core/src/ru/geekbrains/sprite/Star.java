@@ -13,10 +13,20 @@ public class Star extends Sprite {
     private Vector2 v = new Vector2();
     private Rect worldBounds;
 
-    public Star(TextureAtlas atlas) {
-        super(atlas.findRegion("star3"));
-        setHeightProportion(0.02f);
+    public Star(TextureAtlas atlas, String name) {
+        super(atlas.findRegion(name));
+        setHeightProportion(Rnd.nextFloat(0.01f, 0.02f));
         this.v.set(Rnd.nextFloat(-0.005f, 0.005f), Rnd.nextFloat(-0.2f, -0.01f));
+    }
+
+    public static String getStarName() {
+        String name = "star";
+        float i = Rnd.nextFloat(0, 5);
+        if (i<1) return name;
+        else if (i < 2) return name+=1;
+        else if (i < 3) return name+=2;
+        else if (i < 4) return name+=3;
+        else return name+=4;
     }
 
     @Override
