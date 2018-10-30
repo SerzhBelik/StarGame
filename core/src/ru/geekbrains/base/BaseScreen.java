@@ -22,7 +22,7 @@ public class BaseScreen implements Screen, InputProcessor {
     protected Matrix3 screenToWorld;
     protected SpriteBatch batch;
     protected float aspect;
-    protected final float WORLD_BOUNDS_MODIFIER = 42f;
+    protected final float WORLD_BOUNDS_MODIFIER = 1f;
 
 
 
@@ -56,7 +56,12 @@ public class BaseScreen implements Screen, InputProcessor {
         worldBounds.setWidth(WORLD_BOUNDS_MODIFIER*aspect);
         MatrixUtils.calcTransitionMatrix(worldTOGL, worldBounds, glBounds);
         MatrixUtils.calcTransitionMatrix(screenToWorld, screenBounds, worldBounds);
+        resize(worldBounds);
         batch.setProjectionMatrix(worldTOGL);
+
+    }
+
+    public void resize(Rect worldBounds) {
 
     }
 
