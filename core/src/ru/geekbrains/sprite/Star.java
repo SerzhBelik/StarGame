@@ -14,14 +14,15 @@ public class Star extends Sprite {
     private Rect worldBounds;
 
     public Star(TextureAtlas atlas) {
-        super(atlas.findRegion("star"));
-        setHeightProportion(0.01f);
-        this.v.set(Rnd.nextFloat(-0.005f, 0.005f), Rnd.nextFloat(-0.05f, -0.01f));
+        super(atlas.findRegion("star3"));
+        setHeightProportion(0.02f);
+        this.v.set(Rnd.nextFloat(-0.005f, 0.005f), Rnd.nextFloat(-0.2f, -0.01f));
     }
 
     @Override
     public void update(float delta) {
         pos.mulAdd(v, delta);
+        checkAndHandleBounds();
     }
 
     @Override

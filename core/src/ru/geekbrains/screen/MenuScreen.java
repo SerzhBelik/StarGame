@@ -11,14 +11,19 @@ import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.Exit_btn;
 import ru.geekbrains.sprite.Star;
+import ru.geekbrains.sprite.Start_btn;
 
 public class MenuScreen extends BaseScreen {
     private static final int STAR_COUNT = 256;
     private Background background;
     private Texture bgTexture;
     private TextureAtlas textureAtlas;
-    private Star[] stars   ;
+    private Star[] stars;
+    private Start_btn start_btn;
+    private Exit_btn exit_btn;
+    private Vector2 touch;
 //    private Texture backGround;
 //    private Texture spaceShip;
 //    private float speedModifier = super.WORLD_BOUNDS_MODIFIER/200;
@@ -41,6 +46,8 @@ public class MenuScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(textureAtlas);
         }
+        start_btn = new Start_btn(textureAtlas);
+        exit_btn = new Exit_btn(textureAtlas);
 //        batch = new SpriteBatch();
 //        backGround = new Texture("background.jpg");
 //        spaceShip = new Texture("ship.png");
@@ -76,6 +83,8 @@ public class MenuScreen extends BaseScreen {
             for (int i = 0; i < stars.length; i++) {
                 stars[i].draw(batch);
             }
+            start_btn.draw(batch);
+            exit_btn.draw(batch);
             batch.end();
 
 //        buf.set(touch);
@@ -124,8 +133,21 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer){
+        this.touch = touch;
+        start_btn.btnTouchDown(touch);
+        exit_btn.btnTouchDown(touch);
+//        if(start_btn.isMe(this.touch)) start_btn.setScale((float)(start_btn.getScale()*0.95));/*start_btn.setHeightProportion(0.19f);*/
+//        if(exit_btn.isMe(this.touch)) exit_btn.setScale((float)(exit_btn.getScale()*0.95));
+        return false;
 //        this.touch = touch;
 //        v.set(touch.cpy().sub(pos).nor().scl(speedModifier));
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        start_btn.btnTouchUp(touch);
+        if (exit_btn.btnTouchUp(this.touch)) System.exit(0);
+
         return false;
     }
 }

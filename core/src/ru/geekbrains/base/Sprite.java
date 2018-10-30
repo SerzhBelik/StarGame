@@ -68,4 +68,20 @@ public class Sprite extends Rect {
     public void setScale(float scale) {
         this.scale = scale;
     }
+
+    public boolean btnTouchDown(Vector2 touch){
+        if(isMe(touch)) {
+            setScale((float)(getScale()*0.95));
+            return true;
+        }
+            return false;
+    }
+
+    public boolean btnTouchUp(Vector2 touch) {
+        if(isMe(touch)) {
+            setScale((float)(getScale()/0.95));
+            return  true;
+        }
+        return false;
+    }
 }
