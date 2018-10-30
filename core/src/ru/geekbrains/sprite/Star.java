@@ -1,7 +1,6 @@
 package ru.geekbrains.sprite;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.Sprite;
@@ -15,8 +14,11 @@ public class Star extends Sprite {
 
     public Star(TextureAtlas atlas, String name) {
         super(atlas.findRegion(name));
-        setHeightProportion(Rnd.nextFloat(0.01f, 0.02f));
-        this.v.set(Rnd.nextFloat(-0.005f, 0.005f), Rnd.nextFloat(-0.2f, -0.01f));
+        float fl = Rnd.nextFloat(1,20);// коэффициент связывающий видимую удаленность звезды и ее скорость движения
+        setHeightProportion(0.005f*fl/5);
+        this.v.set(Rnd.nextFloat(-0.005f, 0.005f), -0.01f*fl);
+//        setHeightProportion(Rnd.nextFloat(0.005f, 0.02f));
+//        this.v.set(Rnd.nextFloat(-0.005f, 0.005f), Rnd.nextFloat(-0.2f, -0.01f));
     }
 
     public static String getStarName() {

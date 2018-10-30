@@ -50,7 +50,6 @@ public class BaseScreen implements Screen, InputProcessor {
         screenBounds.setBottom(0);
 
         aspect = width/(float)height;
-//        System.out.print(aspect);
 
         worldBounds.setHeight(WORLD_BOUNDS_MODIFIER);
         worldBounds.setWidth(WORLD_BOUNDS_MODIFIER*aspect);
