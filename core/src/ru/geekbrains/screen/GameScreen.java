@@ -10,17 +10,22 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.StarGame;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.MainShip;
 import ru.geekbrains.sprite.Star;
 
 public class GameScreen extends BaseScreen {
-    private static final int STAR_COUNT = 256;
+    private static final int STAR_COUNT = 64;
     private Background background;
     private Texture bgTexture;
     private TextureAtlas textureAtlas;
+    private TextureAtlas mainAtlas;
     private Star[] stars;
     private Vector2 touch;
     private StarGame starGame;
+    private MainShip mainShip;
+    private BulletPool bulletPool;
 
     @Override
     public void show() {
@@ -28,10 +33,13 @@ public class GameScreen extends BaseScreen {
         bgTexture = new Texture("bg.png");
         background = new Background(new TextureRegion(bgTexture));
         textureAtlas = new TextureAtlas("atlas.atlas");
+        mainAtlas = new TextureAtlas("mainAtlas.tpack");
         stars =new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(textureAtlas, Star.getStarName());
         }
+        bulletPool = new BulletPool();
+        mainShip = new MainShip(mainAtlas, bulletPool);
 
     }
 
@@ -39,6 +47,8 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
+//        checkCollisions();
+        deleteAllDestroyed();
         draw();
     }
 
@@ -46,6 +56,8 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(delta);
         }
+        mainShip.update(delta);
+        bulletPool.updateActiveObject(delta);
     }
 
     public void draw() {
@@ -56,6 +68,8 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].draw(batch);
         }
+        mainShip.draw(batch);
+        bulletPool.drawActiveObject(batch);
         batch.end();
     }
 
@@ -65,6 +79,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].resize(worldBounds);
         }
+        mainShip.resize(worldBounds);
     }
 
     @Override
@@ -76,10 +91,12 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean keyDown(int keycode) {
+        mainShip.keyDown(keycode);
         return true;
     }
     @Override
     public boolean keyUp(int keycode) {
+        mainShip.keyUp(keycode);
         return false;
     }
 
@@ -92,5 +109,9 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         return false;
+    }
+
+    public void deleteAllDestroyed(){
+        bulletPool.freeAllDesrtoyedActiveObject();
     }
 }

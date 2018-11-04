@@ -106,8 +106,8 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        start_btn.btnTouchUp(touch);
-        if (exit_btn.btnTouchUp(this.touch)) System.exit(0);
+        touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
+        if (exit_btn.btnTouchUp(touch)) Gdx.app.exit();
         if (start_btn.btnTouchUp(touch))starGame.setScreen(new GameScreen());
 
         return false;

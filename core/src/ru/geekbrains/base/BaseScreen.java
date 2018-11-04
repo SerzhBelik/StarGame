@@ -12,7 +12,7 @@ import ru.geekbrains.math.Rect;
 
 public class BaseScreen implements Screen, InputProcessor {
 
-    private Rect screenBounds;
+    protected Rect screenBounds;
     private Rect worldBounds;
     private Rect glBounds;
     private Vector2 touch;
