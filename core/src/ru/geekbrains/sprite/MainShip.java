@@ -37,6 +37,7 @@ public class MainShip extends Sprite {
 
     @Override
     public void update(float delta) {
+        checkBounds();
         pos.mulAdd(v, delta);
     }
 
@@ -112,9 +113,24 @@ public class MainShip extends Sprite {
     private void stop(){
         v.setZero();
     }
+
+
     private void shoot(){
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, atlas.findRegion("bulletMainShip"), pos, new Vector2(0, 0.5f), 0.015f, worldBounds, 1);
 
+    }
+
+    private boolean checkBounds (){
+        if (this.getLeft() < worldBounds.getLeft()){
+            this.stop();
+            this.setLeft(worldBounds.getLeft());
+        }
+
+        if (this.getRight() > worldBounds.getRight()){
+            this.stop();
+            this.setRight(worldBounds.getRight());
+        }
+        return false;
     }
 }
