@@ -10,8 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.StarGame;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.math.Rnd;
 import ru.geekbrains.pool.BulletPool;
+import ru.geekbrains.pool.ShipPool;
 import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.EnemyShip;
 import ru.geekbrains.sprite.MainShip;
 import ru.geekbrains.sprite.Star;
 
@@ -26,6 +29,9 @@ public class GameScreen extends BaseScreen {
     private StarGame starGame;
     private MainShip mainShip;
     private BulletPool bulletPool;
+    private ShipPool shipPool;
+    private EnemyShip enemyShip;
+    private Rect worldBounds;
 
     @Override
     public void show() {
@@ -39,7 +45,13 @@ public class GameScreen extends BaseScreen {
             stars[i] = new Star(textureAtlas, Star.getStarName());
         }
         bulletPool = new BulletPool();
+        shipPool = new ShipPool();
         mainShip = new MainShip(mainAtlas, bulletPool);
+        enemyShip = shipPool.obtain();
+        enemyShip.set(
+                new Vector2(Rnd.nextFloat(-0.375f + enemyShip.getHalfWidth(), 0.375f - enemyShip.getHalfWidth()), 0.5f + enemyShip.getHeight()),
+                new Vector2(0, -0.2f)
+        );
 
     }
 
@@ -47,7 +59,6 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
-//        checkCollisions();
         deleteAllDestroyed();
         draw();
     }
@@ -58,6 +69,7 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.update(delta);
         bulletPool.updateActiveObject(delta);
+        shipPool.updateActiveObject(delta);
     }
 
     public void draw() {
@@ -70,16 +82,19 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.draw(batch);
         bulletPool.drawActiveObject(batch);
+        shipPool.drawActiveObject(batch);
         batch.end();
     }
 
     @Override
     public void resize(Rect worldBounds) {
+        this.worldBounds = worldBounds;
         background.resize(worldBounds);
         for (int i = 0; i < stars.length; i++) {
             stars[i].resize(worldBounds);
         }
         mainShip.resize(worldBounds);
+        enemyShip.resize(worldBounds);
     }
 
     @Override
@@ -114,5 +129,6 @@ public class GameScreen extends BaseScreen {
 
     public void deleteAllDestroyed(){
         bulletPool.freeAllDesrtoyedActiveObject();
+        shipPool.freeAllDesrtoyedActiveObject();
     }
 }
