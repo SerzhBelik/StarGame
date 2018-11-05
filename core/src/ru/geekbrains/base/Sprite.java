@@ -84,7 +84,6 @@ public class Sprite extends Rect {
         if(isMe(touch)) {
             setScale((float)(getScale()*0.95));
             isPressed = true;
-            System.out.print(touch.x + " " + touch.y);
             return true;
         }
             return false;
@@ -92,10 +91,8 @@ public class Sprite extends Rect {
 
     public boolean btnTouchUp(Vector2 touch) {
         if (isPressed)setScale((float)(getScale()/0.95));
-        System.out.print(touch.x + " " + touch.y);
         if(isMe(touch) && isPressed){
             isPressed = false;
-            System.out.print("dfasdf");
             return  true;
         }
         isPressed = false;

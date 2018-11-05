@@ -103,6 +103,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer){
         this.touch = touch;
+        mainShip.touchDown(touch, pointer);
         return false;
     }
 

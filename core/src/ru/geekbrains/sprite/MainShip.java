@@ -42,7 +42,13 @@ public class MainShip extends Sprite {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        return super.touchDown(touch, pointer);
+        System.out.print(touch.x);
+        if (touch.x > 0){
+            moveRight();
+        } else {
+            moveLeft();
+        }
+        return  false;
     }
 
     @Override
