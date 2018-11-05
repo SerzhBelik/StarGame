@@ -1,17 +1,12 @@
 package ru.geekbrains.sprite;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
-import ru.geekbrains.math.Rnd;
-import ru.geekbrains.pool.BulletPool;
-import ru.geekbrains.pool.ShipPool;
 
 public class EnemyShip extends Sprite {
-//    private ShipPool shipPool;
     private TextureAtlas atlas;
     private Vector2 v = new Vector2();
     public static Rect worldBounds;

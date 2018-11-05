@@ -14,6 +14,7 @@ import ru.geekbrains.sprite.Background;
 import ru.geekbrains.sprite.Exit_btn;
 import ru.geekbrains.sprite.Star;
 import ru.geekbrains.sprite.Start_btn;
+import ru.geekbrains.sprite.Title;
 
 public class MenuScreen extends BaseScreen {
     private static final int STAR_COUNT = 256;
@@ -25,6 +26,8 @@ public class MenuScreen extends BaseScreen {
     private Exit_btn exit_btn;
     private Vector2 touch;
     private StarGame starGame;
+    private Title title;
+    private Texture titleTxtr;
 
     public MenuScreen(StarGame starGame) {
         super();
@@ -38,6 +41,8 @@ public class MenuScreen extends BaseScreen {
         bgTexture = new Texture("bg.png");
         background = new Background(new TextureRegion(bgTexture));
         textureAtlas = new TextureAtlas("atlas.atlas");
+        titleTxtr = new Texture("StarGame.png");
+        title = new Title(new TextureRegion(titleTxtr));
         stars =new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(textureAtlas, Star.getStarName());
@@ -69,6 +74,7 @@ public class MenuScreen extends BaseScreen {
             }
             start_btn.draw(batch);
             exit_btn.draw(batch);
+            title.draw(batch);
             batch.end();
     }
 
@@ -76,6 +82,7 @@ public class MenuScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.worldBounds = worldBounds;
         background.resize(worldBounds);
+        title.resize(worldBounds);
         for (int i = 0; i < stars.length; i++) {
             stars[i].resize(worldBounds);
         }

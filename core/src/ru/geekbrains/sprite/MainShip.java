@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.Sprite;
@@ -13,7 +12,7 @@ import ru.geekbrains.pool.BulletPool;
 
 public class MainShip extends Sprite {
 
-    private Vector2 v0 = new Vector2(0.5f, 0);
+    private Vector2 v0 = new Vector2(0.4f, 0);
     private Vector2 v = new Vector2();
 
     private boolean pressedLeft;
@@ -25,7 +24,6 @@ public class MainShip extends Sprite {
     private Rect worldBounds;
 
     Sound soundShoot = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
-//    private long soundID = soundShoot.play(0);
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2 , 2);
@@ -48,7 +46,7 @@ public class MainShip extends Sprite {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        System.out.print(touch.x);
+        System.out.print("x: " + touch.x + " y: " + touch.y);
         if (touch.x > 0){
             moveRight();
         } else {

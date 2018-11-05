@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
-import ru.geekbrains.StarGame;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.math.Rnd;
@@ -26,18 +24,17 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas mainAtlas;
     private Star[] stars;
     private Vector2 touch;
-    private StarGame starGame;
     private MainShip mainShip;
     private BulletPool bulletPool;
     private ShipPool shipPool;
     private EnemyShip enemyShip;
-    private Rect worldBounds;
 
     @Override
     public void show() {
         super.show();
         bgTexture = new Texture("bg.png");
         background = new Background(new TextureRegion(bgTexture));
+
         textureAtlas = new TextureAtlas("atlas.atlas");
         mainAtlas = new TextureAtlas("mainAtlas.tpack");
         stars =new Star[STAR_COUNT];
@@ -88,7 +85,6 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void resize(Rect worldBounds) {
-        this.worldBounds = worldBounds;
         background.resize(worldBounds);
         for (int i = 0; i < stars.length; i++) {
             stars[i].resize(worldBounds);
