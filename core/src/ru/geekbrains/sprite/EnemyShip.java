@@ -25,19 +25,27 @@ public class EnemyShip extends Ship {
     public void update(float delta) {
         super.update(delta);
         pos.mulAdd(v, delta);
-        if (this.getTop() <= worldBounds.getHalfHeight() && !this.v.equals(actionV)) {
+        if (this.getTop() <= worldBounds.getTop() && !this.v.equals(actionV)) {
             v.scl(0.95f);
             if (v.y >= actionV.y) {
                 this.v.set(actionV);
             }
-//            System.out.println(this.getTop());
-//            System.out.println(worldBounds.getHeight());
         }
         reloadTimer +=delta;
         if (reloadTimer >= reloadInterval) {
             shoot();
             reloadTimer = 0f;
         }
+
+        if (checkBounds()) {
+            this.destroy();
+            System.out.println("Desroyed!");
+        }
+    }
+
+    private boolean checkBounds() {
+        if (this.getTop() < worldBounds.getBottom()) return true;
+        return false;
     }
 
     public void set(
@@ -54,7 +62,6 @@ public class EnemyShip extends Ship {
     ) {
         this.regions = regions;
         this.v0.set(v0);
-//        System.out.print(v0);
         this.bulletRegion = bulletRegion;
         this.bulletHeight = bulletHeight;
         this.bulletV.set(0f, bulletVY);
