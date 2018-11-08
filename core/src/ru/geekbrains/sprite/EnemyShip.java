@@ -26,7 +26,10 @@ public class EnemyShip extends Ship {
         super.update(delta);
         pos.mulAdd(v, delta);
         if (this.getTop() <= worldBounds.getHalfHeight() && !this.v.equals(actionV)) {
-            this.v.set(actionV);
+            v.scl(0.95f);
+            if (v.y >= actionV.y) {
+                this.v.set(actionV);
+            }
 //            System.out.println(this.getTop());
 //            System.out.println(worldBounds.getHeight());
         }

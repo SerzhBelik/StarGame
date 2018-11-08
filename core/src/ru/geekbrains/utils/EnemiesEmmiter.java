@@ -14,7 +14,7 @@ import ru.geekbrains.sprite.EnemyShip;
 public class EnemiesEmmiter {
 
     private static final float ENEMY_SMALL_HEIGHT = 0.1f;
-    private static final float ENEMY_SMALL_BULLET_HEIGHT = 0.01f;
+    private static final float ENEMY_SMALL_BULLET_HEIGHT = 0.02f;
     private static final float ENEMY_SMALL_BULLET_VY = -0.3f;
     private static final int ENEMY_SMALL_BULLET_DAMAGE = 1;
     private static final float ENEMY_SMALL_RELOAD_INTERVAL =2f;
@@ -37,10 +37,10 @@ public class EnemiesEmmiter {
     private TextureRegion[] enemySmallRegion;
     private TextureRegion[] enemyMediumRegion;
     private TextureRegion[] enemyBigRegion;
-    private Vector2 baseEnemyV = new Vector2(0, -0.2f);
+    private Vector2 baseEnemyV = new Vector2(0, -0.3f);
     private Vector2 enemySmallV = new Vector2(0, -0.2f);
     private Vector2 enemyMediumV = new Vector2(0, -0.03f);
-    private Vector2 enemyBigV = new Vector2(0, -0.005f);
+    private Vector2 enemyBigV = new Vector2(0, -0.01f);
 
     private EnemyPool enemyPool;
     private Rect worldBounds;
