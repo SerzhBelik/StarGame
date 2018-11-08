@@ -9,11 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
-import ru.geekbrains.math.Rnd;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
 import ru.geekbrains.sprite.Background;
-import ru.geekbrains.sprite.EnemyShip;
 import ru.geekbrains.sprite.MainShip;
 import ru.geekbrains.sprite.Star;
 import ru.geekbrains.utils.EnemiesEmmiter;
@@ -29,7 +27,6 @@ public class GameScreen extends BaseScreen {
     private MainShip mainShip;
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
-    private EnemyShip enemyShip;
     private Sound laserSound;
     private Sound bulletSound;
     EnemiesEmmiter enemiesEmmiter;
@@ -37,8 +34,8 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.mp3"));
         laserSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
-        bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
 
         bgTexture = new Texture("bg.png");
         background = new Background(new TextureRegion(bgTexture));

@@ -26,6 +26,8 @@ public class BaseScreen implements Screen, InputProcessor {
 
 
 
+
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
@@ -82,7 +84,6 @@ public class BaseScreen implements Screen, InputProcessor {
     @Override
     public void dispose() {
         batch.dispose();
-
     }
 
     @Override

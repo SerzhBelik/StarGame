@@ -130,10 +130,6 @@ public class MainShip extends Ship {
                     stop();
                 }
                 break;
-//            case Input.Keys.SPACE:
-//                shoot();
-//                break;
-
         }
         return false;
     }
@@ -149,7 +145,6 @@ public class MainShip extends Ship {
     private void stop(){
         v.setZero();
     }
-
 
     private boolean checkBounds (){
         if (this.getLeft() < worldBounds.getLeft()){

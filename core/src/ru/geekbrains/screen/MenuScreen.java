@@ -1,6 +1,7 @@
 package ru.geekbrains.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -29,6 +30,8 @@ public class MenuScreen extends BaseScreen {
     private Title title;
     private Texture titleTxtr;
 
+    protected Music mainTheme;
+
     public MenuScreen(StarGame starGame) {
         super();
         this.starGame = starGame;
@@ -49,6 +52,11 @@ public class MenuScreen extends BaseScreen {
         }
         start_btn = new Start_btn(textureAtlas);
         exit_btn = new Exit_btn(textureAtlas);
+
+        mainTheme = Gdx.audio.newMusic(Gdx.files.internal("sounds/mainTheme.mp3")); // Music: https://www.bensound.com
+        mainTheme.setLooping(true);
+        mainTheme.setVolume(0.2f);
+        mainTheme.play();
     }
 
     @Override
@@ -92,6 +100,7 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         bgTexture.dispose();
         textureAtlas.dispose();
+        mainTheme.dispose();
         super.dispose();
     }
 
