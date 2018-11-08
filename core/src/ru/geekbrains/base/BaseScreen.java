@@ -120,7 +120,7 @@ public class BaseScreen implements Screen, InputProcessor {
         return false;
     }
 
-    private boolean touchUp(Vector2 touch, int pointer) {
+    public boolean touchUp(Vector2 touch, int pointer) {
         return false;
     }
 

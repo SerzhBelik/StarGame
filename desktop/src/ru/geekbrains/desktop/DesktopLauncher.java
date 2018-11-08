@@ -16,7 +16,7 @@ public class DesktopLauncher {
 		new LwjglApplication(new StarGame(), config);
 		Music mainTheme = Gdx.audio.newMusic(Gdx.files.internal("sounds/mainTheme.mp3")); // Music: https://www.bensound.com
 		mainTheme.setLooping(true);
-		mainTheme.setVolume(0.3f);
+		mainTheme.setVolume(0.2f);
 		mainTheme.play();
 	}
 }
