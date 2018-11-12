@@ -1,6 +1,7 @@
 package ru.geekbrains.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.List;
 
+import ru.geekbrains.StarGame;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
@@ -40,8 +42,19 @@ public class GameScreen extends BaseScreen {
     private ExplosionPool explosionPool;
     private Sound laserSound;
     private Sound bulletSound;
+    Music mainTheme;
     private Sound explosionSound;
-    EnemiesEmmiter enemiesEmmiter;
+    private EnemiesEmmiter enemiesEmmiter;
+    private StarGame starGame;
+    private float gameOverInterval = 1.5f;
+
+
+    public GameScreen(StarGame starGame, Music mainTheme) {
+        super();
+        this.starGame = starGame;
+        this.mainTheme = mainTheme;
+
+    }
 
     @Override
     public void show() {
@@ -85,7 +98,10 @@ public class GameScreen extends BaseScreen {
             stars[i].update(delta);
         }
         explosionPool.updateActiveObject(delta);
-        if (mainShip.isDestroyed()) return;
+        if (mainShip.isDestroyed()) {
+            gameOverInterval -= delta;
+            return;
+        }
         mainShip.update(delta);
         bulletPool.updateActiveObject(delta);
         enemyPool.updateActiveObject(delta);
@@ -107,8 +123,10 @@ public class GameScreen extends BaseScreen {
             enemyPool.drawActiveObject(batch);
         } else {
 //            System.out.print("game over");
-            gameOver.draw(batch);
-            newGame.draw(batch);
+            if (gameOverInterval < 0) {
+                gameOver.draw(batch);
+                newGame.draw(batch);
+            }
         }
         explosionPool.drawActiveObject(batch);
 
@@ -173,6 +191,8 @@ public class GameScreen extends BaseScreen {
         mainAtlas.dispose();
         laserSound.dispose();
         bulletSound.dispose();
+        mainTheme.dispose();
+
         super.dispose();
     }
 
@@ -191,12 +211,16 @@ public class GameScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer){
         this.touch = touch;
         mainShip.touchDown(touch, pointer);
+        newGame.btnTouchDown(touch);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
         mainShip.touchUp(touch, pointer);
+        if (newGame.btnTouchUp(touch)) {
+            starGame.setScreen(new MenuScreen(starGame));
+        }
         return false;
     }
 

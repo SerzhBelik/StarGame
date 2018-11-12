@@ -7,7 +7,7 @@ import ru.geekbrains.base.Sprite;
 public class NewGame extends Sprite {
     public NewGame(TextureAtlas atlas) {
         super(atlas.findRegion("button_new_game"));
-        setHeightProportion(0.08f);
+        setHeightProportion(0.07f);
         pos.set(0, -0.4f);
     }
 }

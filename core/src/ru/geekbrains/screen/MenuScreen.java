@@ -30,7 +30,7 @@ public class MenuScreen extends BaseScreen {
     private Title title;
     private Texture titleTxtr;
 
-    protected Music mainTheme;
+    private Music mainTheme;
 
     public MenuScreen(StarGame starGame) {
         super();
@@ -100,7 +100,6 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         bgTexture.dispose();
         textureAtlas.dispose();
-//        mainTheme.dispose();
         super.dispose();
     }
 
@@ -124,7 +123,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
         if (exit_btn.btnTouchUp(touch)) Gdx.app.exit();
-        if (start_btn.btnTouchUp(touch))starGame.setScreen(new GameScreen());
+        if (start_btn.btnTouchUp(touch))starGame.setScreen(new GameScreen(starGame, mainTheme));
 
         return false;
     }
