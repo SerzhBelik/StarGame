@@ -106,4 +106,8 @@ public class Sprite extends Rect {
     public void flushDesrtoy(){
         isDestroyed = false;
     }
+
+    public boolean isDestroyed() {
+        return isDestroyed;
+    }
 }

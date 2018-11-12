@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.base.Ship;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
+import ru.geekbrains.pool.ExplosionPool;
 
 
 public class EnemyShip extends Ship {
@@ -14,9 +15,10 @@ public class EnemyShip extends Ship {
     private Vector2 v0 = new Vector2();
     Vector2 actionV = new Vector2();
 
-    public EnemyShip(BulletPool bulletPool, Rect worldBounds, Sound shootSound) {
+    public EnemyShip(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound shootSound) {
         super(shootSound);
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
         this.v.set(v0);
     }
@@ -39,12 +41,13 @@ public class EnemyShip extends Ship {
 
         if (checkBounds()) {
             this.destroy();
+            boom();
             System.out.println("Desroyed!");
         }
     }
 
     private boolean checkBounds() {
-        if (this.getTop() < worldBounds.getBottom()) return true;
+        if (this.getBottom() < worldBounds.getBottom()) return true;
         return false;
     }
 
@@ -71,5 +74,20 @@ public class EnemyShip extends Ship {
         setHeightProportion(height);
         this.v.set(v0);
         this.actionV = actionV;
+    }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > getTop()
+                || bullet.getTop() < pos.y
+        );
+    }
+
+    @Override
+    public void destroy() {
+        boom();
+        hp = 0;
+        super.destroy();
     }
 }
