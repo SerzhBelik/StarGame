@@ -100,7 +100,7 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         bgTexture.dispose();
         textureAtlas.dispose();
-        mainTheme.dispose();
+//        mainTheme.dispose();
         super.dispose();
     }
 

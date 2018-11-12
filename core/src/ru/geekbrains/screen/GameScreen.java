@@ -18,7 +18,9 @@ import ru.geekbrains.pool.ExplosionPool;
 import ru.geekbrains.sprite.Background;
 import ru.geekbrains.sprite.Bullet;
 import ru.geekbrains.sprite.EnemyShip;
+import ru.geekbrains.sprite.GameOver;
 import ru.geekbrains.sprite.MainShip;
+import ru.geekbrains.sprite.NewGame;
 import ru.geekbrains.sprite.Star;
 import ru.geekbrains.utils.EnemiesEmmiter;
 
@@ -26,6 +28,8 @@ public class GameScreen extends BaseScreen {
     private static final int STAR_COUNT = 64;
     private Background background;
     private Texture bgTexture;
+    private GameOver gameOver;
+    private NewGame newGame;
     private TextureAtlas textureAtlas;
     private TextureAtlas mainAtlas;
     private Star[] stars;
@@ -51,6 +55,10 @@ public class GameScreen extends BaseScreen {
 
         textureAtlas = new TextureAtlas("atlas.atlas");
         mainAtlas = new TextureAtlas("mainAtlas.tpack");
+
+        gameOver = new GameOver(mainAtlas);
+        newGame = new NewGame(mainAtlas);
+
         stars =new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(textureAtlas, Star.getStarName());
@@ -76,11 +84,12 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(delta);
         }
+        explosionPool.updateActiveObject(delta);
+        if (mainShip.isDestroyed()) return;
         mainShip.update(delta);
         bulletPool.updateActiveObject(delta);
         enemyPool.updateActiveObject(delta);
         enemiesEmmiter.generate(delta);
-        explosionPool.updateActiveObject(delta);
     }
 
     public void draw() {
@@ -93,10 +102,16 @@ public class GameScreen extends BaseScreen {
         }
         if (!mainShip.isDestroyed()) {
             mainShip.draw(batch);
+
+            bulletPool.drawActiveObject(batch);
+            enemyPool.drawActiveObject(batch);
+        } else {
+//            System.out.print("game over");
+            gameOver.draw(batch);
+            newGame.draw(batch);
         }
-        bulletPool.drawActiveObject(batch);
-        enemyPool.drawActiveObject(batch);
         explosionPool.drawActiveObject(batch);
+
         batch.end();
     }
 
