@@ -23,6 +23,7 @@ import ru.geekbrains.sprite.Background;
 import ru.geekbrains.sprite.Bullet;
 import ru.geekbrains.sprite.EnemyShip;
 import ru.geekbrains.sprite.GameOver;
+import ru.geekbrains.sprite.HealthPoint;
 import ru.geekbrains.sprite.MainShip;
 import ru.geekbrains.sprite.NewGame;
 import ru.geekbrains.sprite.Star;
@@ -43,6 +44,7 @@ public class GameScreen extends BaseScreen {
     private Texture bgTexture;
     private GameOver gameOver;
     private NewGame newGame;
+    private HealthPoint healthPoint;
     private TextureAtlas textureAtlas;
     private TextureAtlas mainAtlas;
     private Star[] stars;
@@ -85,6 +87,7 @@ public class GameScreen extends BaseScreen {
 
         gameOver = new GameOver(mainAtlas);
         newGame = new NewGame(mainAtlas);
+        healthPoint = new HealthPoint(new TextureRegion(new Texture("hp.png")));
 
         stars =new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
@@ -129,6 +132,7 @@ public class GameScreen extends BaseScreen {
         switch (state){
             case PLAYING:
                 mainShip.update(delta);
+                healthPoint.update(delta, mainShip.getHp());
                 bulletPool.updateActiveObject(delta);
                 enemyPool.updateActiveObject(delta);
                 enemiesEmmiter.generate(delta, frags);
@@ -174,6 +178,7 @@ public class GameScreen extends BaseScreen {
             explosionPool.drawActiveObject(batch);
             bulletPool.drawActiveObject(batch);
             enemyPool.drawActiveObject(batch);
+            healthPoint.draw(batch);
         }
         printInfo();
 
@@ -185,7 +190,7 @@ public class GameScreen extends BaseScreen {
         sbHP.setLength(0);
         sbLevel.setLength(0);
         font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft(), worldBounds.getTop());
-        font.draw(batch, sbHP.append(HP).append(mainShip.getHp()), worldBounds.pos.x, worldBounds.getTop(), Align.center);
+//        font.draw(batch, sbHP.append(HP).append(mainShip.getHp()), worldBounds.pos.x, worldBounds.getTop(), Align.center);
         font.draw(batch, sbLevel.append(LEVEL).append(enemiesEmmiter.getLevel()), worldBounds.getRight(), worldBounds.getTop(), Align.right);
 
     }
