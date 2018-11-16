@@ -13,7 +13,7 @@ public class Title extends Sprite {
 
     @Override
     public void resize (Rect worldBounds){
-        setHeightProportion(0.08f);
+        setHeightProportion(0.06f);
         pos.set(0, 0.1f);
     }
 }

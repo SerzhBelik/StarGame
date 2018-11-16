@@ -67,8 +67,8 @@ public class EnemiesEmmiter {
         this.bulletRegion = atlas.findRegion("bulletEnemy");
     }
 
-    public void generate(float delta, int frags) {
-        if ((frags / (level * level * 5)) > 0) level++;
+    public void generate(float delta, int score) {
+        if ((score / (level * level * 20)) > 0) level++;
         generateInterval = 4 * (1 / (0.8f + 0.2f * level));
         generateTimer += delta;
         if (generateTimer >= generateInterval) {
@@ -83,10 +83,10 @@ public class EnemiesEmmiter {
                         ENEMY_SMALL_BULLET_HEIGHT,
                         ENEMY_SMALL_BULLET_VY,
                         ENEMY_SMALL_BULLET_DAMAGE,
-                        ENEMY_SMALL_RELOAD_INTERVAL*Rnd.nextFloat(0.8f, 1.2f),
+                        ENEMY_SMALL_RELOAD_INTERVAL*Rnd.nextFloat(0.8f, 1.2f)*(0.9f + 0.1f*level),
                         ENEMY_SMALL_HEIGHT,
                         ENEMY_SMALL_HP,
-                        enemySmallV
+                        enemySmallV.cpy().scl((0.9f + 0.1f*level))
                 );
             } else if (type < 0.9) {
                 enemy.set(
@@ -96,10 +96,10 @@ public class EnemiesEmmiter {
                         ENEMY_MEDIUM_BULLET_HEIGHT,
                         ENEMY_MEDIUM_BULLET_VY,
                         ENEMY_MEDIUM_BULLET_DAMAGE,
-                        ENEMY_MEDIUM_RELOAD_INTERVAL*Rnd.nextFloat(0.8f, 1.2f),
+                        ENEMY_MEDIUM_RELOAD_INTERVAL*Rnd.nextFloat(0.8f, 1.2f)*(0.9f + 0.1f*level),
                         ENEMY_MEDIUM_HEIGHT,
                         ENEMY_MEDIUM_HP,
-                        enemyMediumV
+                        enemyMediumV.cpy().scl((0.9f + 0.1f*level))
                 );
             } else {
                 enemy.set(
@@ -109,10 +109,10 @@ public class EnemiesEmmiter {
                         ENEMY_BIG_BULLET_HEIGHT,
                         ENEMY_BIG_BULLET_VY,
                         ENEMY_BIG_BULLET_DAMAGE,
-                        ENEMY_BIG_RELOAD_INTERVAL*Rnd.nextFloat(0.8f, 1.2f),
+                        ENEMY_BIG_RELOAD_INTERVAL*Rnd.nextFloat(0.8f, 1.2f)*(0.9f + 0.1f*level),
                         ENEMY_BIG_HEIGHT,
                         ENEMY_BIG_HP,
-                        enemyBigV
+                        enemyBigV.cpy().scl((0.9f + 0.1f*level))
                 );
             }
             enemy.setBottom(worldBounds.getTop());

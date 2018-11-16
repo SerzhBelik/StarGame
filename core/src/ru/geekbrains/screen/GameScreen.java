@@ -1,6 +1,7 @@
 package ru.geekbrains.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -34,12 +35,12 @@ import ru.geekbrains.utils.EnemiesEmmiter;
 
 public class GameScreen extends BaseScreen {
     private static final int STAR_COUNT = 64;
-    private int frags;
-    private static final String FRAGS = "Frags: ";
+    private int score;
+    private static final String SCORE = "Score: ";
     private static final String HP = "HP: ";
     private static final String LEVEL = "Level: ";
 
-    private StringBuilder sbFrags = new StringBuilder();
+    private StringBuilder sbScore = new StringBuilder();
     private StringBuilder sbHP = new StringBuilder();
     private StringBuilder sbLevel = new StringBuilder();
 
@@ -65,7 +66,7 @@ public class GameScreen extends BaseScreen {
     private EnemiesEmmiter enemiesEmmiter;
     private StarGame starGame;
     private float gameOverInterval = 1.5f;
-    private enum State {PLAYING, GAME_OVER}
+    private enum State {PLAYING, GAME_OVER, PAUSE}
     private State state;
     private Font font;
 
@@ -74,6 +75,7 @@ public class GameScreen extends BaseScreen {
         super();
         this.starGame = starGame;
         this.mainTheme = mainTheme;
+        Gdx.input.setCatchBackKey(true);
 
     }
 
@@ -115,6 +117,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
+
         super.render(delta);
         update(delta);
         checkCollisions();
@@ -123,18 +126,11 @@ public class GameScreen extends BaseScreen {
     }
 
     public void update(float delta) {
+        explosionPool.updateActiveObject(delta);
+        if (state == State.PAUSE) return;
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(delta);
         }
-        explosionPool.updateActiveObject(delta);
-//        if (mainShip.isDestroyed()) {
-//            gameOverInterval -= delta;
-//            return;
-//        }
-//        mainShip.update(delta);
-//        bulletPool.updateActiveObject(delta);
-//        enemyPool.updateActiveObject(delta);
-//        enemiesEmmiter.generate(delta);
 
         switch (state){
             case PLAYING:
@@ -142,7 +138,7 @@ public class GameScreen extends BaseScreen {
                 healthPoint.update(delta, mainShip.getHp());
                 bulletPool.updateActiveObject(delta);
                 enemyPool.updateActiveObject(delta);
-                enemiesEmmiter.generate(delta, frags);
+                enemiesEmmiter.generate(delta, score);
                 bonusPool.updateActiveObject(delta);
                 if (mainShip.isShield()){
                     shield.pos.set(mainShip.pos);
@@ -165,18 +161,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].draw(batch);
         }
-//        if (!mainShip.isDestroyed()) {
-//            mainShip.draw(batch);
-//
-//            bulletPool.drawActiveObject(batch);
-//            enemyPool.drawActiveObject(batch);
-//        } else {
-//            System.out.print("game over");
-//            if (gameOverInterval < 0) {
-//                gameOver.draw(batch);
-//                newGame.draw(batch);
-//            }
-//        }
+
         explosionPool.drawActiveObject(batch);
         if (state == State.GAME_OVER){
             if (gameOverInterval < 0){
@@ -185,8 +170,8 @@ public class GameScreen extends BaseScreen {
             }
 
         } else {
-            mainShip.draw(batch);
             if (mainShip.isShield()) shield.draw(batch);
+            mainShip.draw(batch);
             explosionPool.drawActiveObject(batch);
             bulletPool.drawActiveObject(batch);
             enemyPool.drawActiveObject(batch);
@@ -199,11 +184,10 @@ public class GameScreen extends BaseScreen {
     }
 
     public void printInfo(){
-        sbFrags.setLength(0);
+        sbScore.setLength(0);
         sbHP.setLength(0);
         sbLevel.setLength(0);
-        font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft(), worldBounds.getTop());
-//        font.draw(batch, sbHP.append(HP).append(mainShip.getHp()), worldBounds.pos.x, worldBounds.getTop(), Align.center);
+        font.draw(batch, sbScore.append(SCORE).append(score), worldBounds.getLeft(), worldBounds.getTop());
         font.draw(batch, sbLevel.append(LEVEL).append(enemiesEmmiter.getLevel()), worldBounds.getRight(), worldBounds.getTop(), Align.right);
 
     }
@@ -217,6 +201,7 @@ public class GameScreen extends BaseScreen {
             float minDist = enemy.getHalfWidth() + mainShip.getHalfWidth();
             if (enemy.pos.dst2(mainShip.pos) < minDist * minDist) {
                 enemy.destroy();
+                if (mainShip.isShield()) return;
                 mainShip.destroy();
                 state = State.GAME_OVER;
                 return;
@@ -232,7 +217,6 @@ public class GameScreen extends BaseScreen {
             if (bonus.pos.dst2(mainShip.pos) < minDist * minDist) {
                 bonus.destroy();
                 mainShip.setBonus();
-                // FIXME
                 return;
             }
         }
@@ -245,6 +229,7 @@ public class GameScreen extends BaseScreen {
             }
             if (mainShip.isBulletCollision(bullet)) {
                 bullet.destroy();
+                if (mainShip.isShield()) return;
                 mainShip.damage(bullet.getDamage());
                 if (mainShip.isDestroyed()){
                     state = State.GAME_OVER;
@@ -264,7 +249,7 @@ public class GameScreen extends BaseScreen {
                 if (enemy.isBulletCollision(bullet)) {
                     bullet.destroy();
                     enemy.damage(bullet.getDamage());
-                    if (enemy.isDestroyed()) frags++;
+                    if (enemy.isDestroyed()) score += enemy.getExp();
                     return;
                 }
             }
@@ -295,7 +280,12 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean keyDown(int keycode) {
         mainShip.keyDown(keycode);
-        return true;
+        if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK) ){
+            if (state == State.PLAYING)state = State.PAUSE;
+            else state = State.PLAYING;
+        }
+
+            return true;
     }
     @Override
     public boolean keyUp(int keycode) {
@@ -322,6 +312,8 @@ public class GameScreen extends BaseScreen {
 
 
 
+
+
     public void deleteAllDestroyed(){
         bulletPool.freeAllDesrtoyedActiveObject();
         enemyPool.freeAllDesrtoyedActiveObject();
@@ -332,7 +324,7 @@ public class GameScreen extends BaseScreen {
     private void startNewGame(){
         enemiesEmmiter.setLevel(1);
         state = State.PLAYING;
-        frags = 0;
+        score = 0;
         bulletPool.freeAllActiveObject();
         enemyPool.freeAllActiveObject();
         explosionPool.freeAllActiveObject();

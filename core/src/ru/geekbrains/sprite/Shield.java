@@ -9,7 +9,7 @@ public class Shield extends Sprite {
 
     public Shield(TextureRegion textureRegion) {
         super(textureRegion);
-        setHeightProportion(0.05f);
+        setHeightProportion(0.15f);
 
     }
 

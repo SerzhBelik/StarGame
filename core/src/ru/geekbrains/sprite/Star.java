@@ -15,8 +15,8 @@ public class Star extends Sprite {
     public Star(TextureAtlas atlas, String name) {
         super(atlas.findRegion(name));
         float fl = Rnd.nextFloat(1,20);// коэффициент связывающий видимую удаленность звезды и ее скорость движения
-        setHeightProportion(0.005f*fl/5);
-        this.v.set(Rnd.nextFloat(-0.005f, 0.005f), -0.025f*fl);
+        setHeightProportion(0.006f*fl/5);
+        this.v.set(Rnd.nextFloat(-0.005f, 0.005f), -0.03f*fl);
 //        setHeightProportion(Rnd.nextFloat(0.005f, 0.02f));
 //        this.v.set(Rnd.nextFloat(-0.005f, 0.005f), Rnd.nextFloat(-0.2f, -0.01f));
     }

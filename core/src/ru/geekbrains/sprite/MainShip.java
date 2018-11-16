@@ -23,7 +23,7 @@ public class MainShip extends Ship {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    private Shield shield;
+//    private Shield shield;
     private boolean isShield;
 
     private float gunTimer = 0;
