@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.Ship;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.math.Rnd;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.ExplosionPool;
 
@@ -21,6 +22,13 @@ public class MainShip extends Ship {
 
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
+
+    private Shield shield;
+    private boolean isShield;
+
+    private float gunTimer = 0;
+    private float shieldTimer = 0;
+//    private float gunInterval = 10;
 
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) {
@@ -48,8 +56,14 @@ public class MainShip extends Ship {
         checkBounds();
         pos.mulAdd(v, delta);
         reloadTimer += delta;
+        if (gunTimer > 0) gunTimer -= delta;
+        else setGunType(1);
+
+        if (shieldTimer > 0) shieldTimer -= delta;
+        else setShield(false);
+
         if (reloadTimer >= reloadInterval) {
-            shoot();
+            shoot(gunType);
             reloadTimer = 0f;
         }
         if (getRight() > worldBounds.getRight()) {
@@ -176,5 +190,41 @@ public class MainShip extends Ship {
         boom();
         hp = 0;
         super.destroy();
+    }
+
+
+    public void setBonus() {
+        float bonusType = Rnd.nextFloat(0, 1);
+        if (bonusType < 0.2){
+            heal();
+        } else if (bonusType < 0.5){
+            setGunType(3);
+            gunTimer = 10;
+        } else if (bonusType < 0.7){
+            setGunType(5);
+            gunTimer = 10;
+        } else {
+            enabledShield();
+            shieldTimer = 10;
+        }
+    }
+
+    private void enabledShield() {
+        isShield = true;
+    }
+
+
+    private void heal() {
+        if (hp + 20 < 100) hp += 20;
+        else hp = 100;
+        
+    }
+
+    public boolean isShield() {
+        return isShield;
+    }
+
+    public void setShield(boolean shield) {
+        isShield = shield;
     }
 }

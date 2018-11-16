@@ -16,16 +16,19 @@ import ru.geekbrains.StarGame;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.base.Font;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.pool.BonusPool;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
 import ru.geekbrains.pool.ExplosionPool;
 import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.Bonus;
 import ru.geekbrains.sprite.Bullet;
 import ru.geekbrains.sprite.EnemyShip;
 import ru.geekbrains.sprite.GameOver;
 import ru.geekbrains.sprite.HealthPoint;
 import ru.geekbrains.sprite.MainShip;
 import ru.geekbrains.sprite.NewGame;
+import ru.geekbrains.sprite.Shield;
 import ru.geekbrains.sprite.Star;
 import ru.geekbrains.utils.EnemiesEmmiter;
 
@@ -45,6 +48,7 @@ public class GameScreen extends BaseScreen {
     private GameOver gameOver;
     private NewGame newGame;
     private HealthPoint healthPoint;
+    private Shield shield;
     private TextureAtlas textureAtlas;
     private TextureAtlas mainAtlas;
     private Star[] stars;
@@ -53,6 +57,7 @@ public class GameScreen extends BaseScreen {
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
     private ExplosionPool explosionPool;
+    private BonusPool bonusPool;
     private Sound laserSound;
     private Sound bulletSound;
     Music mainTheme;
@@ -88,6 +93,7 @@ public class GameScreen extends BaseScreen {
         gameOver = new GameOver(mainAtlas);
         newGame = new NewGame(mainAtlas);
         healthPoint = new HealthPoint(new TextureRegion(new Texture("hp.png")));
+        shield = new Shield(new TextureRegion(new Texture("shield.png")));
 
         stars =new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
@@ -95,7 +101,8 @@ public class GameScreen extends BaseScreen {
         }
         explosionPool = new ExplosionPool(mainAtlas, explosionSound);
         bulletPool = new BulletPool();
-        enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds, bulletSound);
+        bonusPool = new BonusPool(new TextureRegion(new Texture("bonus.png")));
+        enemyPool = new EnemyPool(bulletPool, explosionPool, bonusPool, worldBounds, bulletSound);
         mainShip = new MainShip(mainAtlas, bulletPool, explosionPool, laserSound);
         enemiesEmmiter = new EnemiesEmmiter(enemyPool, worldBounds, mainAtlas);
 
@@ -136,6 +143,10 @@ public class GameScreen extends BaseScreen {
                 bulletPool.updateActiveObject(delta);
                 enemyPool.updateActiveObject(delta);
                 enemiesEmmiter.generate(delta, frags);
+                bonusPool.updateActiveObject(delta);
+                if (mainShip.isShield()){
+                    shield.pos.set(mainShip.pos);
+                }
                 if (mainShip.isDestroyed()){
                     state = State.GAME_OVER;
                 }
@@ -175,10 +186,12 @@ public class GameScreen extends BaseScreen {
 
         } else {
             mainShip.draw(batch);
+            if (mainShip.isShield()) shield.draw(batch);
             explosionPool.drawActiveObject(batch);
             bulletPool.drawActiveObject(batch);
             enemyPool.drawActiveObject(batch);
             healthPoint.draw(batch);
+            bonusPool.drawActiveObject(batch);
         }
         printInfo();
 
@@ -209,6 +222,22 @@ public class GameScreen extends BaseScreen {
                 return;
             }
         }
+
+        List<Bonus> bonusList = bonusPool.getActiveObjects();
+        for (Bonus bonus : bonusList) {
+            if (bonus.isDestroyed()) {
+                continue;
+            }
+            float minDist = bonus.getHalfWidth() + mainShip.getHalfWidth();
+            if (bonus.pos.dst2(mainShip.pos) < minDist * minDist) {
+                bonus.destroy();
+                mainShip.setBonus();
+                // FIXME
+                return;
+            }
+        }
+
+
         List<Bullet> bulletList = bulletPool.getActiveObjects();
         for (Bullet bullet : bulletList) {
             if (bullet.isDestroyed() || bullet.getOwner() == mainShip) {
@@ -297,6 +326,7 @@ public class GameScreen extends BaseScreen {
         bulletPool.freeAllDesrtoyedActiveObject();
         enemyPool.freeAllDesrtoyedActiveObject();
         explosionPool.freeAllDesrtoyedActiveObject();
+        bonusPool.freeAllDesrtoyedActiveObject();
     }
 
     private void startNewGame(){

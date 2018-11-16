@@ -30,6 +30,8 @@ public abstract class Ship extends Sprite {
     protected int hp;
     protected TextureRegion bulletRegion;
 
+    protected int gunType = 1;
+
     private Sound shootSound;
 
     public Ship(TextureRegion region, int rows, int cols, int frames, Sound shootSound) {
@@ -56,9 +58,12 @@ public abstract class Ship extends Sprite {
     }
 
 
-    protected void shoot() {
-        Bullet bullet = bulletPool.obtain();
+    protected void shoot(int gunType) {
+        for (int i = 0; i < gunType; i++){
+            bulletV.x = -0.15f * (gunType - 1)/2 + 0.15f * i;
+            Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, bulletDamage);
+    }
         shootSound.play();
     }
 
@@ -78,5 +83,13 @@ public abstract class Ship extends Sprite {
 
     public int getHp() {
         return hp;
+    }
+
+    public int getGunType() {
+        return gunType;
+    }
+
+    public void setGunType(int gunType) {
+        this.gunType = gunType;
     }
 }
