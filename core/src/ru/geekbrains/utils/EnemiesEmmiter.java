@@ -45,8 +45,10 @@ public class EnemiesEmmiter {
     private Rect worldBounds;
     private TextureRegion bulletRegion;
 
-    private float generateInterval = 4f;
+    private float generateInterval;
     private float generateTimer;
+
+    private int level = 1;
 
 
     public EnemiesEmmiter(EnemyPool enemyPool, Rect worldBounds, TextureAtlas atlas) {
@@ -65,7 +67,9 @@ public class EnemiesEmmiter {
         this.bulletRegion = atlas.findRegion("bulletEnemy");
     }
 
-    public void generate(float delta) {
+    public void generate(float delta, int frags) {
+        if ((frags / (level * level * 5)) > 0) level++;
+        generateInterval = 4 * (1 / (0.8f + 0.2f * level));
         generateTimer += delta;
         if (generateTimer >= generateInterval) {
             generateTimer = 0f;
@@ -114,5 +118,13 @@ public class EnemiesEmmiter {
             enemy.setBottom(worldBounds.getTop());
             enemy.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemy.getHalfWidth(), worldBounds.getRight() - enemy.getHalfWidth());
         }
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

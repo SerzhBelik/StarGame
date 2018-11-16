@@ -75,4 +75,8 @@ public abstract class Ship extends Sprite {
             destroy();
         }
     }
+
+    public int getHp() {
+        return hp;
+    }
 }

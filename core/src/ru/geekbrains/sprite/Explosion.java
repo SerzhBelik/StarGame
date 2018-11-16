@@ -10,7 +10,7 @@ import ru.geekbrains.base.Sprite;
 public class Explosion extends Sprite {
 
     private Sound sound;
-    private float anumateInterval = 0.017f;
+    private float anumateInterval = 0.01f;
     private float animateTimer;
 
     public Explosion(TextureRegion region, int rows, int cols, int frames, Sound sound) {
